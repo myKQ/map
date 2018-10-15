@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+
+	// window.navigator.geolocation.getCurrentPosition()  获取地理位置的函数
+	// 这个函数接受三个值，
+	// 第一个值是成功的回调函数 这个函数里面接受position对象 这个对象里面包含当前的用户地理位置信息
+	// 第二值是失败的回调函数 这个函数接受一个error对象  这个对象里面包含当前的错误信息
+	// 第三个值是一个对象，用于配置
+
+	window.navigator.geolocation.getCurrentPosition(function(position){
+		console.log(position);
+		// 当前纬度
+		var lat = position.coords.latitude
+		// 当前的经度
+		var long = position.coords.longitude
+
+		alert('您当前的纬度为：' + lat +'经度为：' + long);
+
+	},function(error){
+		console.log(error);
+	},{
+		// 设置超时  接受毫秒数
+		timeout : 1000
+	});
+	</script>
+</body>
+</html>

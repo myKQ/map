@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script type="text/javascript">
+	// web存储分为 localStorage和sessionStorage  这两种API基本一致
+	
+
+	// 存数据
+	window.localStorage.setItem('username','localuser');
+	window.sessionStorage.setItem('username','sessionuser');
+
+	// 通过索引值获取键名
+	alert(window.localStorage.key(0));
+	alert(window.sessionStorage.key(0));
+	
+	// 整体清除
+	window.localStorage.clear();
+	window.sessionStorage.clear();
+
+	// 获取数据的长度
+	alert(window.localStorage.length);
+	alert(window.sessionStorage.length);
+
+	// 删除数据
+	window.localStorage.removeItem('username');
+	window.sessionStorage.removeItem('username');
+
+	// 取数据
+	alert(window.localStorage.getItem('username'));
+	alert(window.sessionStorage.getItem('username'));
+
+
+
+	</script>
+</body>
+</html>

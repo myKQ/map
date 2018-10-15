@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="file" name="" id="">
+	<button>点击我读取文件</button>
+
+	<script type="text/javascript">
+	// 需求 点击按钮将本地的文件进行读取，展示在浏览器里面 （上传文件进行本地预览）
+	
+	//　找对象
+	var file = document.querySelector('input[type="file"]');
+	var btn = document.querySelector('button');
+
+	btn.addEventListener('click', function (argument) {
+		// 将file控件里面的文件提取出来
+		// file.value拿到的只是一个文件路径而已
+		// console.log(file.value);
+		// console.dir 可以将标签对象打印出来
+		// console.dir(file);
+		// 拿实实在在的文件
+		var data = file.files[0];
+		// console.log(data);
+		
+		// 实例化一个FR对象
+		var fr = new FileReader();
+		console.log(fr);
+		// 用这个对象的readAsDataURL（）去读取data文件
+		fr.readAsDataURL(data);
+
+		// 因为读取文件是一个异步操作 所以当读取完毕之后以事件的形式通知我
+		fr.addEventListener('load',function(){
+			// 当文件读取完毕之后该事件就会被触发
+			console.log(1);
+			// 会将读取文件的结果存放的ruslut这个属性下面
+			var myResult = fr.result;
+			console.log(myResult);
+			// 创建图片标签
+			var img = document.createElement('img');
+			// 引用图片
+			img.src = myResult;
+			document.body.appendChild(img);
+		})
+
+		console.log(2);
+	})
+	</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<!-- 引入bootstrap的的专用字体图标 -->
+	<link rel="stylesheet" href="library/css/font-awesome.min.css">
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+			list-style-type: none;
+		}
+		.box{
+			width: 800px;
+			height: 500px;
+			border: 1px solid #000;
+			margin: 100px auto;
+			border-radius: 5px;
+			box-shadow: 0 0 10px 2px;
+		}
+		.video_wrap{
+			width: 80%;
+			height: 100%;
+			float: left;
+		}
+		.video_list{
+			width: 20%;
+			height: 100%;
+			float: right;
+			border-left: 1px solid #ccc;
+			box-sizing: border-box;
+		}
+		.video_wrap video{
+			width: 100%;
+			height: 85%;
+			background-color: #000;
+		}
+		.controls_wrap{
+			line-height: 34px;
+			font-size: 0;
+			margin-top: 10px;
+			padding: 5px 0 5px 5px;
+		}
+		.controls_wrap i{
+			font-size: 36px;
+			text-align: center;
+			color: #f40;
+			cursor: pointer;
+		}
+		.controls_wrap i:nth-child(2){
+			font-size: 16px;
+			color: #000;
+			width: 10%;
+		}
+		.controls_wrap i,.controls_wrap input{
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.controls_wrap i{
+			width: 5%;
+		}
+		.controls_wrap .progress{
+			background-color: #fff;
+			width: 80%;
+			margin: 0;
+			outline: none;
+		}
+		.controls_wrap .sound{
+			font-size: 12px;
+			position: relative;
+			height: 30px;
+			line-height: 30px;
+		}
+		.controls_wrap .sound:hover input{
+			visibility: visible;
+			opacity: 1;
+		}
+		.controls_wrap .sound input{
+			position: absolute;
+			transform: rotate(-90deg);
+			left: 5px;
+			top: 0px;
+			transform-origin:left top;
+			width: 80px;
+			visibility: hidden;
+			transition: all 1s;
+			opacity: 0;
+		}
+		.video_list{
+			background-color: #666;
+		}
+		.video_list li{
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			color: #fff;
+			font-size: 14px;
+			letter-spacing: 5px;
+			cursor: pointer;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		.test{
+			width: 100px;
+			height: 100px;
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="icon-lightbulb"></div>
+	<div class="box">
+		<div class="video_wrap">
+			<video src="movies/movie.mp4" autoplay></video>
+			<div class='controls_wrap'>
+				<i class="play icon-pause"></i>
+				<i class="full icon-fullscreen"></i>
+				<input class="progress" type="range" value="0" min="0" max="100">
+				<i class="sound icon-volume-up">
+					<input class="volume_progress" type="range" value="100">
+				</i>
+			</div>
+		</div>
+		<div class="video_list">
+			<ul>
+				<li data-src="movies/mov_bbb.ogg">兔子哥</li>
+				<li data-src="movies/movie.mp4">灰姑娘</li>
+				<li data-src="movies/movie02.mp4">万合天宜</li>
+				<li data-src="movies/movie04.ogg">囧人合集</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var play = document.querySelector('.play');
+	var video = document.querySelector('video');
+	var flag = true;
+	// 点击播放和暂停视频
+	play.addEventListener('click', function (argument) {
+		if(flag){
+			flag = false;
+			video.pause();
+			this.className = "play icon-play";
+		}else{
+			flag = true;
+			video.play();
+			this.className = "play icon-pause";
+		}
+	})
+	// 实现全屏
+	var full = document.querySelector('.full');
+	full.addEventListener('click',function(){
+		if(video.requestFullScreen){
+			video.requestFullScreen();
+		}else{
+			// webkit前缀在JS里面都是遵守驼峰命名
+			video.webkitRequestFullScreen();
+		}
+	})
+
+	// 在视频播放的时候让滚动条跟随发生改变
+	var progress = document.querySelector('.progress');
+	video.addEventListener('timeupdate',function(){
+		// timeupdate 当播放的时间发生改变的时候持续触发
+		// 思路：当前视频的时间/总的视频时间 = 当前的进度条的value/进度条的max值
+		// 当前的视频时间 currentTime 总的视频事件 duration
+		progress.value = video.currentTime/video.duration*100;
+	})
+
+	// 拖拽进度条动态去改变video的currentTime
+	progress.addEventListener('input',function(){
+		// 思路：当前视频的时间 = 当前的进度条的value/进度条的max值*总的视频时间
+		video.currentTime = this.value/100*video.duration;
+	})
+
+	// 拖拽声音的进度条改变声音的大小
+	var volume_progress = document.querySelector('.volume_progress');
+	volume_progress.addEventListener('input',function(){
+
+		// 思路 当前的声音 = 当前的进度条的value/进度条的max值*声音的最大值
+		// 声音的最大值是1
+		console.log(video.volume)
+		video.volume = this.value/100;
+	})
+
+	// 点击小喇叭实现静音和有声音的切换
+	var sound = document.querySelector('.sound');
+	var flag2 = true;
+	sound.addEventListener('click',function(){
+		if(flag2){
+			video.volume = 0;
+			volume_progress.value = 0;
+			sound.className = 'sound icon-volume-off';
+			flag2 = false;
+		}else{
+			video.volume = 1;
+			volume_progress.value = 100;
+			sound.className = 'sound icon-volume-up';
+			flag2 = true;
+		}
+	})
+	// 这里注意留了一个坑 当点击进度条的时候会将点击冒泡到sound身上，所以，需要阻止掉冒泡事件
+	var volumeProgress = document.querySelector('.volume_progress');
+	
+	// 点击每一个li然后切换视频 
+	var _li = document.querySelectorAll('.video_list li');
+	for(var i = 0; i < _li.length; i++){
+		_li[i].addEventListener('click',function(){
+			// 获取当前的src的值
+			var src = this.dataset['src'];
+			video.src = src;
+
+			// 这里又有一个小的坑 当如果暂停的时候去切换视频，会带来按钮的图标和flag不统一的问题
+			//每一次点击还原一下
+			flag = true;
+			play.className = "play icon-pause";
+		})
+	}
+
+</script>
+</html>

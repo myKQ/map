@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<script type="text/javascript">
+	// 需求 ：判断当前设备的网络状态
+	// window.navigator.onLine 这个属性返回的是一个布尔值，就是当前设备的网络状态
+	// 本质的监听的是本地连接，而并不是真正的网路数据流量
+	alert(window.navigator.onLine);
+
+
+	// 上面的属性不会实时的通知我们当前的网络状态，所以我们需要一个事件去通知
+	window.addEventListener('online', function(){
+		// online事件是当网络从无网到有网的时候触发
+		console.log('恭喜你，你的网络畅通');
+	})
+
+	window.addEventListener('offline',function(){
+		// offline事件是网络从有网到无网的时候触发
+		console.log('不好意思，网络连接失败');
+	})
+
+	</script>
+</body>
+</html>
