@@ -48,7 +48,7 @@
                 var row = {};
                 var productindex = Math.floor(Math.random() * productNames.length);
                 var price = parseFloat(priceValues[productindex]);
-                var quantity = 1 + Math.round(Math.random() * 10);
+                var quantity = 1 + Math.round(Math.random() * 100000000);
                 row["firstname"] = firstNames[Math.floor(Math.random() * firstNames.length)];
                 row["lastname"] = lastNames[Math.floor(Math.random() * lastNames.length)];
                 row["productname"] = productNames[productindex];
@@ -57,7 +57,7 @@
                 row["total"] = price * quantity;
                 return row;
             }
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 20; i++) {
                 var row = generaterow(i);
                 data[i] = row;
             }
@@ -99,8 +99,12 @@
             $("#grid").jqxGrid(
             {
                 width: 900,
-                height: 350,
+                height: '100%',
                 // sortable: true,
+                autoBind: true,
+                // autoheight:true,
+                // autorowheight:true,
+                // scrollmode: 'logical',
                 source: dataAdapter,
                 showtoolbar: true,
                 editable: true,
@@ -108,6 +112,15 @@
                 columnsresize: true,
                 columnsreorder:true,
                 selectionmode: 'checkbox',
+                // columnsresize: true,
+                //是否允许多行选中
+                // selectionmode: 'multiplerowsextended',
+                //设置表格内容数据
+                rendergridrows: function (params) {
+                //这里的返回值需要根绝实际情况作调整。如果params.data获取不到。可以用dataadapter来获取，如dataadapter.recordids[0].*等
+                    return params.data;
+                },
+
                 rendertoolbar: function (toolbar) {
                     var me = this;
                     var container = $("<div style='margin: 5px;'></div>");
@@ -198,7 +211,16 @@
                         width: 180,
                         columntype: 'dropdownlist'
                     },
-                    { text: 'Quantity', datafield: 'quantity', width: 80, cellsalign: 'right' },
+                    { 
+                        text: 'Quantity', 
+                        datafield: 'quantity', 
+                        width: 80, 
+                        cellsalign: 'right',
+
+                        // 确定单元格或列内容是否溢出时是否显示省略号。
+                        enableellipsis: true,
+                        everpresentrowactions: "add update delete reset"
+                         },
                     { text: 'Unit Price', datafield: 'price', width: 90, cellsalign: 'right', cellsformat: 'c2' },
                     { text: 'Total', datafield: 'total',  cellsalign: 'right', cellsformat: 'c2' }
                 ]
